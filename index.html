@@ -10,8 +10,8 @@
 <body>
         <h1>MOKEPON!</h1>
 
-        <section id="seleccion_mascota">
-            <h2>Elige tu Mokepon:</h2>
+        <section id="seleccion-mascota">
+            <h2>Elige tu Mokepon</h2>
 
             <ul>
                 <li>
@@ -26,42 +26,30 @@
                     <input type="radio" class="sel-mascota" name="mascota" id="ratigueya">
                     <label for="ratigueya">Ratigueya 🔥</label>
                 </li>
-                <li>
-                    <input type="radio" class="sel-mascota" name="mascota" id="langostelvis">
-                    <label for="langostelvis">Langostelvis 🌊🔥</label>
-                </li>
-                <li>
-                    <input type="radio" class="sel-mascota" name="mascota" id="tucapalma">
-                    <label for="tucapalma">Tucapalma 🌊🌱</label>
-                </li>
-                <li>
-                    <input type="radio" class="sel-mascota" name="mascota" id="pydos">
-                    <label for="pydos">Pydos 🔥🌱</label>
-                </li>
             </ul>
 
-            <button id="btn_mascota">Seleccionar</button>
+            <button id="btn-mascota">Seleccionar</button>
         </section>
 
-        <section id="seleccion_ataque">
-            <h2>Elige tu ataque:</h2>
+        <div id="body-batalla">
+            <section id="seleccion-ataque">
+                <h2>Batalla</h2>
 
-            <p>Tu <span id="mascota-jugador"></span> tiene <span>3</span> vidas.</p>
-            <p><span id="mascota-enemigo"></span> del enemigo tiene <span>3</span> vidas.</p>
+                <p>Tu <span id="mascota-jugador"></span> tiene <span id="hp-jugador"></span> HP.</p>
+                <p><span id="mascota-enemigo"></span> del enemigo tiene <span id="hp-enemigo"></span> HP.</p>
 
-            <p>
-                <button id="bnt_fuego">Fuego🔥</button>
-                <button id="btn_planta">Planta🌱</button>
-                <button id="btn_agua">Agua🌊</button>
-            </p>
-        </section>
+                <h3>Ataques</h3>
 
-        <section id="mensajes">
-            <p>Tu mascota ataco con Fuego, el mascota enemigo ataco con Planta: GANASTE!! 🎉</p>
-        </section>
+                <p id="ataques"></p>
+            </section>
 
-        <section id="reiniciar">
-            <button id="btn_reiniciar">Reiniciar</button>
-        </section>
+            <section id="mensajes">
+                <h2>Historial de batalla</h2>
+            </section>
+
+            <section id="reiniciar">
+                <button id="btn-reiniciar">Reiniciar</button>
+            </section>
+        </div>
 </body>
 </html>
