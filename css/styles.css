@@ -1,0 +1,71 @@
+body {
+    background-image: url(../assets/img/bg-day.jpg);
+    background-size: cover;
+    padding: 0;
+    margin: 0;
+    color: aliceblue;
+  }
+
+h1 {
+    color: hotpink;
+    width: 310px;
+    height: 50px;
+    background-color: teal;
+}
+
+#wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5%;
+    text-align: center;
+}
+
+#main {
+    width: 600px;
+    padding: 30px 50px 55px 50px;
+    background-color: rgba(0, 0, 0, 0.525);
+    border-radius: 7px;
+}
+
+.mascotas {
+    display: flex;
+    justify-content: space-around;
+    margin: 35px 0px 55px 0px;
+}
+
+.label-mascota {
+    height: 180px;
+    width: 158px;
+    background: blueviolet;
+    border-radius: 5px;
+    display: inline-block;
+    position: relative;
+}
+
+input {
+    position: absolute;
+    z-index: 2;
+}
+
+.label-mascota:hover {
+    transition: 100ms linear;
+    background-color: pink;
+}
+
+#btn-mascota {
+    display: block;
+    margin: auto;
+    background-color: rgb(236, 218, 218);
+    border-radius: 10px;
+    height: 35px;
+    width: 150px;
+}
+
+.ataque-jugador {
+    color: blue;
+    margin: 0px 15px;
+    border-radius: 5px;
+    width: 120px;
+    height: 50px;
+}

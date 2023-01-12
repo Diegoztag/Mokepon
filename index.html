@@ -6,50 +6,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mokepon</title>
     <script src="./js/mokepon.js" defer></script>
+    <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
+    <div id="wrap">
+
         <h1>MOKEPON!</h1>
 
-        <section id="seleccion-mascota">
-            <h2>Elige tu Mokepon</h2>
+        <div id="main">
 
-            <ul>
-                <li>
-                    <input type="radio" class="sel-mascota" name="mascota" id="hipodoge">
-                    <label for="hipodoge">Hipodoge 🌊</label>
-                </li>
-                <li>
-                    <input type="radio" class="sel-mascota" name="mascota" id="capipepo">
-                    <label for="capipepo">Capipepo 🌱</label>
-                </li>
-                <li>
-                    <input type="radio" class="sel-mascota" name="mascota" id="ratigueya">
-                    <label for="ratigueya">Ratigueya 🔥</label>
-                </li>
-            </ul>
+            <section id="seleccion-mascota">
+                <h2>Elige tu Mokepon</h2>
 
-            <button id="btn-mascota">Seleccionar</button>
-        </section>
+                <div class="mascotas">
+                    <div>
+                        <input type="radio" class="sel-mascota" name="mascota" id="hipodoge">
+                        <label class="label-mascota" for="hipodoge">Hipodoge 🌊</label>
+                    </div>
 
-        <div id="body-batalla">
-            <section id="seleccion-ataque">
-                <h2>Batalla</h2>
+                    <div class="a">
+                        <input type="radio" class="sel-mascota" name="mascota" id="capipepo">
+                        <label class="label-mascota" for="capipepo">Capipepo 🌱</label>
+                    </div>
 
-                <p>Tu <span id="mascota-jugador"></span> tiene <span id="hp-jugador"></span> HP.</p>
-                <p><span id="mascota-enemigo"></span> del enemigo tiene <span id="hp-enemigo"></span> HP.</p>
+                    <div class="a">
+                        <input type="radio" class="sel-mascota" name="mascota" id="ratigueya">
+                        <label class="label-mascota" for="ratigueya">Ratigueya 🔥</label>
+                    </div>
+                </div>
 
-                <h3>Ataques</h3>
 
-                <p id="ataques"></p>
+                <button id="btn-mascota">Seleccionar</button>
             </section>
 
-            <section id="mensajes">
-                <h2>Historial de batalla</h2>
-            </section>
+            <div id="body-batalla">
+                <section id="seleccion-ataque">
+                    <h2>Batalla</h2>
 
-            <section id="reiniciar">
-                <button id="btn-reiniciar">Reiniciar</button>
-            </section>
+                    <p>Tu <span id="mascota-jugador"></span> tiene <span id="hp-jugador"></span> HP.</p>
+                    <p><span id="mascota-enemigo"></span> del enemigo tiene <span id="hp-enemigo"></span> HP.</p>
+
+                    <h3>Ataques</h3>
+
+                    <p id="ataques"></p>
+                </section>
+
+                <section id="mensajes">
+                    <h2>Historial de batalla</h2>
+                </section>
+
+                <section id="reiniciar">
+                    <button id="btn-reiniciar">Reiniciar</button>
+                </section>
+            </div>
+
         </div>
+
+    </div>
 </body>
 </html>
