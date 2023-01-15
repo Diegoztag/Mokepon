@@ -1,6 +1,6 @@
 let dbMokepon = [
     {
-        "nombre": "Hipodoge",
+        "nombre": "Maremira",
         "tipo": ["Agua"],
         "hp": 100,
         "ataques": {
@@ -10,7 +10,7 @@ let dbMokepon = [
             }
     },
     {
-        "nombre": "Capipepo",
+        "nombre": "Clorofendri",
         "tipo": ["Planta"],
         "hp": 100,
         "ataques": {
