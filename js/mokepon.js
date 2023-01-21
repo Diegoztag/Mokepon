@@ -7,7 +7,7 @@ let dbMokepon = [
             "Golpe gota": 5,
             "Marea": 15,
             "Lluvia": 50
-            }
+        }
     },
     {
         "nombre": "Clorofendri",
@@ -20,7 +20,7 @@ let dbMokepon = [
         }
     },
     {
-        "nombre": "Ratigueya",
+        "nombre": "Fireroar",
         "tipo": ["Fuego"],
         "hp": 100,
         "ataques": {
@@ -46,7 +46,7 @@ function iniciarJuego() {
 
     //addEventListener dinamico se crea a como se necesite
     document.addEventListener("click", function(event){
-        if (event.target.className == "sel-mascota"){
+        if (event.target.className == "radio-mascota"){
             btnMascotaJugador.disabled = false;
         }
     }, false);
@@ -54,26 +54,33 @@ function iniciarJuego() {
     btnMascotaJugador.addEventListener('click', seleccionMascotaJugador);
 }
 
-function seleccionMascotaJugador(){
+function seleccionMascotaJugador() {
     let inputMascotaJugador = document.querySelector('#seleccion-mascota input[type="radio"]:checked');
-    let spanMascotaJugador = document.getElementById('mascota-jugador');
+    let spanMascotaJugador = document.getElementById('batalla-nombre-jugador');
+
+    spanMascotaJugador.textContent = capitalize(inputMascotaJugador.id);
+    crearMensaje(`Seleccionaste a <strong>${spanMascotaJugador.textContent}</strong>`);
+    //Extraemos del json de la info de los mokepones la info del mokepon seleccionado
+    infoMokeponJugador = dbMokepon.find(elem => elem.nombre == spanMascotaJugador.textContent);
+
+    escenaBatalla();
+}
+
+function escenaBatalla() {
     let divBatalla = document.getElementById('body-batalla');
     let sectionMascota = document.getElementById('seleccion-mascota');
 
     sectionMascota.style.display = 'none';
     divBatalla.style.display = 'block';
-    spanMascotaJugador.textContent = capitalize(inputMascotaJugador.id);
-    crearMensaje(`Seleccionaste a <strong>${spanMascotaJugador.textContent}</strong>`);
-
-    //Extraemos del json de la info de los mokepones la info del mokepon seleccionado
-    infoMokeponJugador = dbMokepon.find(elem => elem.nombre == spanMascotaJugador.textContent);
 
     mostrarBtnAtaquesJugador();
+    seleccionMascotaEnemigo();
+    iniciarBatalla();
 }
 
-function mostrarBtnAtaquesJugador(){
-    let parentBtnAtaques = document.querySelector('#ataques');
-    let btnAtaques = document.querySelector('#ataques button');
+function mostrarBtnAtaquesJugador() {
+    let parentBtnAtaques = document.querySelector('#seccion-ataques');
+    let btnAtaques = document.querySelector('#seccion-ataques button');
     //Elimina botones de ataque creados para crear los del nuevo mokepon seleccionado
     btnAtaques ? eliminarNodosDom(parentBtnAtaques) : false;
 
@@ -85,43 +92,41 @@ function mostrarBtnAtaquesJugador(){
         btnAtaque.id = ataque.replace(' ','-')
         parentBtnAtaques.appendChild(btnAtaque);
     }
-
-    seleccionMascotaEnemigo();
 }
 
-function seleccionMascotaEnemigo(){
+function seleccionMascotaEnemigo() {
     let inputMascotaEnemigo = document.querySelectorAll('#seleccion-mascota input[type="radio"]');
-    let spanMascotaEnemigo = document.getElementById('mascota-enemigo');
+    let spanMascotaEnemigo = document.getElementById('batalla-nombre-enemigo');
 
     spanMascotaEnemigo.textContent = capitalize(inputMascotaEnemigo[aleatorio(1,3) - 1].id);
     crearMensaje(`Tu enemigo seleccionó a <strong>${spanMascotaEnemigo.textContent}</strong>`);
 
     //Extraemos del json de mokepones la info del mokepon enemigo
     infoMokeponEnemigo = dbMokepon.find(elem => elem.nombre == spanMascotaEnemigo.textContent);
-
-    iniciarBatalla();
 }
 
-function iniciarBatalla(){
-    let spanHpJugador = document.getElementById('hp-jugador');
-    let spanHpEnemigo = document.getElementById('hp-enemigo');
-    contadorHpJugador = infoMokeponJugador.hp;
+function iniciarBatalla() {
+    let progressHpEnemigo = document.getElementById('hp-enemigo');
+    let progressHpJugador = document.getElementById('hp-jugador');
+
     contadorHpEnemigo = infoMokeponEnemigo.hp;
+    contadorHpJugador = infoMokeponJugador.hp;
 
-    spanHpJugador.innerHTML = `<strong>${contadorHpJugador}</strong>`;
-    spanHpEnemigo.innerHTML = `<strong>${contadorHpEnemigo}</strong>`;
+    progressHpEnemigo.value = contadorHpEnemigo;
+    progressHpJugador.value = contadorHpJugador;
 
-    crearMensaje(`Inicia la batalla 💥💥💥`);
+    crearMensaje(`Inicia la batalla...`);
 
-    ataqueJugador(spanHpEnemigo);
+    ataqueJugador();
 }
 
-function ataqueJugador(spanHpEnemigo) {
+function ataqueJugador() {
     //addEventListener dinamico se crea a necesidad al presionar boton ataque
     document.addEventListener("click", function(event){
         if (event.target.className == "ataque-jugador"){
+            let progressHpEnemigo = document.getElementById('hp-enemigo');
             let nombreAtaque = event.target.textContent;
-            let btnAtaques = document.querySelector('#ataques').childNodes;
+            let btnAtaques = document.querySelector('#seccion-ataques').childNodes;
             let valorAtaque;
 
             //Se obtiene el valor del ataque que selecciono el jugador
@@ -133,11 +138,10 @@ function ataqueJugador(spanHpEnemigo) {
 
             //Si el contador disminuye de 0 saltara el mensaje de enemigo derrotado de lo contrario muestra el hp restante
             if(contadorHpEnemigo > 0) {
-                crearMensaje(`El HP del enemigo bajo a <strong>${contadorHpEnemigo}</strong>`);
-                spanHpEnemigo.textContent = contadorHpEnemigo;
+                progressHpEnemigo.value = contadorHpEnemigo;
             } else {
                 crearMensaje(`<strong>El enemigo ha sido derrotado</strong>`);
-                spanHpEnemigo.innerHTML = `<strong>0</strong>`;
+                progressHpEnemigo.value = 0;
                 //Al derrotar al enemigo se desactivan los botones de ataque
                 btnAtaques.forEach(btn => {
                     btn.disabled = true;
@@ -153,8 +157,8 @@ function ataqueJugador(spanHpEnemigo) {
 }
 
 function ataqueEnemigo() {
-    let btnAtaques = document.querySelector('#ataques').childNodes;
-    let spanHpJugador = document.getElementById('hp-jugador');
+    let btnAtaques = document.querySelector('#seccion-ataques').childNodes;
+    let progressHpJugador = document.getElementById('hp-jugador');
     let arrAtaques = [];
     let valoraleatorio = aleatorio(1,3) -1;
 
@@ -172,11 +176,10 @@ function ataqueEnemigo() {
 
     //Si el contador disminuye de 0 saltara el mensaje de jugador derrotado de lo contrario muestra el hp restante
     if(contadorHpJugador > 0) {
-        crearMensaje(`El HP de tu mascota bajo a <strong>${contadorHpJugador}</strong>`);
-        spanHpJugador.textContent = contadorHpJugador;
+        progressHpJugador.value = contadorHpJugador;
     } else {
         crearMensaje(`<strong>Tu mascota fue derrotada</strong>`);
-        spanHpJugador.textContent = 0;
+        progressHpJugador.value = 0;
         //Al derrotar al enemigo se desactivan los botones de ataque
         btnAtaques.forEach(btn => {
             btn.disabled = true;
@@ -189,21 +192,17 @@ function resultado(){
     let btnReiniciar = document.getElementById('reiniciar');
 
     if(contadorHpEnemigo <= 0 ){
-        crearMensaje(`Haz GANADO!! 🎉🎉🎉`);
+        crearMensaje(`Haz GANADO!! 🎉`);
         btnReiniciar.style.display = 'block';
     }
 
     if(contadorHpJugador <= 0) {
-        crearMensaje(`Haz PERDIDO!! 💀💀💀`);
+        crearMensaje(`Haz PERDIDO!! 💀`);
         btnReiniciar.style.display = 'block';
     }
 
 
     btnReiniciar.addEventListener('click', reiniciar);
-}
-
-function reiniciar() {
-    location.reload();
 }
 
 function aleatorio(min, max){
@@ -221,9 +220,16 @@ function eliminarNodosDom(parent){
 }
 
 function crearMensaje(mensaje) {
+    let mensajes = document.querySelector('#seccion-mensajes');
+    let parrafo =  document.querySelector('#seccion-mensajes p');
     let pMensaje = document.createElement('p');
+    
+    document.querySelector('#seccion-mensajes p') ? mensajes.replaceChild(pMensaje, parrafo) :  mensajes.appendChild(pMensaje);
     pMensaje.innerHTML = mensaje;
-    document.querySelector('#mensajes').appendChild(pMensaje);
+}
+
+function reiniciar() {
+    location.reload();
 }
 
 iniciarJuego();

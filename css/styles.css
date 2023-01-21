@@ -3,19 +3,32 @@
     src: url("../assets/fonts/VT323/VT323-Regular.ttf");
 }
 
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+:root {
+    --color1: #f0f8ff;
+    --color2: #fee81c;
+    --color3: #3789ff;
+  }
+
 body {
     background-image: url(../assets/img/bg-day.jpg);
-    background-size: cover;
+    background-size: 100% 100%;
+    background-attachment: fixed;
     padding: 0;
     margin: 0;
-    color: aliceblue;
+    color: var(--color1);
     font-family: 'pixel';
 }
 
 h1 {
     position: relative;
     letter-spacing: 3px;
-    color: #cef437;
+    color: var(--color2);
     width: 310px;
     height: 50px;
     margin: 50px 0px -10px;
@@ -31,11 +44,11 @@ h1 {
 }
 
 #main {
-    width: 600px;
+    width: 730px;
     padding: 30px 50px 55px 50px;
     background-color: rgba(0, 0, 0, 0.525);
     border-radius: 7px;
-    border: 2px solid blue;
+    border: 5px solid var(--color3);
 }
 
 .mascotas {
@@ -45,29 +58,32 @@ h1 {
 }
 
 .label-mascota {
-    height: 260px;
+    height: 300px;
     width: 190px;
-    background: blueviolet;
+    background: #5084d0;
     border-radius: 5px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0px 0px 30px 0px;
+    padding: 0px 0px 15px 0px;
     align-items: center;
+    background-image: url(https://cdn.dribbble.com/users/1260392/screenshots/3087645/blue_sky_pixel_animation.gif);
+    background-size: cover;
 }
 
 .label-mascota:hover {
-    transition: 100ms linear;
-    background-color: pink;
+    transition: 200ms linear;
+    transform: scale(1.10);
 }
 
 .label-mascota img {
-    width: 170px;
-    height: 170px;
+    width: 165px;
+    height: 165px;
+    margin: 10px;
 }
 
 .nombre-mascota {
-    font-size: 22px;
+    font-size: 28px;
 }
 
 .badge {
@@ -94,30 +110,164 @@ h1 {
     width: inherit;
 }
 
+.radio-mascota {
+    -webkit-appearance: none;
+    appearance: none;
+    margin-top: 10px;
+    font: inherit;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 0.15em solid currentColor;
+    border-radius: 50%;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+}
+
+.radio-mascota::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--color2);
+    background-color: CanvasText;
+}
+
+.radio-mascota:checked::before {
+    transform: scale(1);
+}
+
 #btn-mascota {
     display: block;
     margin: auto;
-    background-color: rgb(236, 218, 218);
     border-radius: 10px;
     height: 43px;
     width: 160px;
-    background: #e0dc00;
-    color: white;
+    background: var(--color2);
+    color: var(--color1);
     text-shadow: -1px 0 black, 0 2px black, 1px 0 black, 0 -2.5px black;
-    border: 4px solid #1da6dc;
+    border: 3px solid var(--color3);
     font-family: 'pixel';
     font-size: 25px;
 }
 
-.ataque-jugador {
-    color: blue;
-    margin: 0px 15px;
-    border-radius: 5px;
-    width: 120px;
-    height: 50px;
+#btn-mascota:disabled {
+    border: 1px solid #fefbfb;
+    background-color: #b4b4b4;
+    color: #ffffff;
 }
 
-#mensajes {
-    height: 250px;
-    overflow: auto;
+#body-batalla {
+    width: 500px;
+    margin: auto;
+    border: 5px double #cac16a;
+    margin-top: 30px;
 }
+
+#UI-batalla {
+    background-image: url(../assets/img/template-batalla.png);
+    background-size: 100% 100%;
+    display: grid;
+    grid-template-columns: 225px 225px;
+    grid-template-rows: 137px 137px;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#UI-batalla img {
+    margin: auto;
+    height: 150px;
+    width: 150px;
+}
+
+.info-mascota {
+    font-size: 22px;
+    color: #484848;
+    display: flex;
+    -webkit-box-reflect: x;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.info-mascota progress {
+    accent-color: #75d5a8;
+}
+
+#info-enemigo {
+    align-items: flex-start;
+}
+
+#info-jugador {
+    align-items: flex-end;
+}
+
+.info-batalla {
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+#seccion-mensajes  {
+    width: 60%;
+    height: 85px;
+    background-image: url(../assets/img/template-mensaje.png);
+    background-size: 100% 100%;
+}
+
+#seccion-mensajes p {
+    font-size: 20px;
+    text-align: start;
+    margin-left: 35px;
+}
+
+#seccion-ataques {
+    background: darkslategrey;
+    width: 40%;
+    height: fit-content;
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 50% 50%;
+    justify-items: center;
+}
+
+#seccion-ataques button {
+    color: #575757;
+    border-radius: 15px;
+    width: 97px;
+    height: 41px;
+    font-family: 'Pixel';
+    font-size: 18px;
+    outline: 1px solid #6b6b6c;
+}
+
+@media (max-width: 769px) {
+    body {
+        background-size: cover;
+    }
+
+    #wrap {
+        transform: scale(0.9);
+    }
+}
+
+@media (max-width: 699px) {
+    #wrap {
+        transform: scale(0.7);
+    }
+}
+
+@media (max-width: 572px) {
+    #wrap {
+        transform: scale(0.65);
+    }
+}
+
+@media (max-width: 500px) {
+    #wrap {
+        transform: scale(0.5);
+    }
+}
+
