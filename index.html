@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mokepon</title>
-    <script src="./js/mokepon.js" defer></script>
     <link rel="stylesheet" href="./css/styles.css">
 </head>
 <body>
@@ -15,64 +14,35 @@
 
         <div id="main">
 
-            <section id="seleccion-mascota">
+            <section id="mascotas">
                 <h2>Elige tu Mokepon</h2>
 
-                <div class="mascotas">
-                    <label class="label-mascota" for="maremira">
-                        <img src="./assets/img/agua.png" alt="">
-                        <span class="nombre-mascota">Maremira</span>
-                        <span class="badge agua">Agua</span>
-                        <input type="radio" class="radio-mascota" name="mascota" id="maremira">
-                    </label>
-
-                    <label class="label-mascota" for="fireroar">
-                        <img src="./assets/img/fuego.png" alt="">
-                        <span class="nombre-mascota">Fireroar</span>
-                        <span class="badge fuego">Fuego</span>
-                        <input type="radio" class="radio-mascota" name="mascota" id="fireroar">
-                    </label>
-
-                    <label class="label-mascota" for="clorofendri">
-                        <img src="./assets/img/planta.png" alt="">
-                        <span class="nombre-mascota">Clorofendri</span>
-                        <span class="badge planta">Planta</span>
-                        <input type="radio" class="radio-mascota" name="mascota" id="clorofendri">
-                    </label>
+                <div id="lista-mascotas">
                 </div>
 
                 <button id="btn-mascota">Seleccionar</button>
             </section>
 
-            <div id="body-batalla">
+            <section id="ver-mapa">
+                <canvas id="mapa"></canvas>
+                <button onclick="moverMasota()">Mover</button>
+            </section>
 
-                <section id="UI-batalla">
-                    <div id="info-enemigo" class="info-mascota">
-                        <span id="batalla-nombre-enemigo"></span>
-                        <progress max="100" value="" id="hp-enemigo"></progress>
+            <section id="batalla">
+
+                <section id="batalla-UI">
+                </section>
+
+                <section id="batalla-info">
+                    <div id="mensajes">
                     </div>
-                        
-                    <img id="img-enemigo" src="./assets/img/agua.png" alt="">
 
-                    <img id="img-jugador" src="./assets/img/battle-planta.png" alt="">
-
-                    <div id="info-jugador" class="info-mascota">
-                        <span id="batalla-nombre-jugador"></span>
-                        <progress max="100" value="" id="hp-jugador"></progress>
+                    <div id="ataques"> 
                     </div>
 
                 </section>
 
-                <div class="info-batalla">
-                    <section id="seccion-mensajes">
-                    </section>
-
-                    <section id="seccion-ataques"> 
-                    </section>
-
-                </div>
-
-            </div>
+            </section>
 
             <section id="reiniciar">
                 <button id="btn-reiniciar">Reiniciar</button>
@@ -81,5 +51,7 @@
         </div>
 
     </div>
+
+    <script src="./js/mokepon.js" defer></script>
 </body>
 </html>

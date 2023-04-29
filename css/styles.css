@@ -51,7 +51,7 @@ h1 {
     border: 5px solid var(--color3);
 }
 
-.mascotas {
+#lista-mascotas {
     display: flex;
     justify-content: space-around;
     margin: 35px 0px 55px 0px;
@@ -93,15 +93,15 @@ h1 {
     padding: 4px;
 }
 
-.agua {
+.Agua {
     background-color: #1da6dc;
 }
 
-.fuego {
+.Fuego {
     background-color: #e05725;
 }
 
-.planta {
+.Planta {
     background-color: #4fc14f;
 }
 
@@ -140,7 +140,7 @@ h1 {
     transform: scale(1);
 }
 
-#btn-mascota {
+#btn-mascota, #btn-reiniciar {
     display: block;
     margin: auto;
     border-radius: 10px;
@@ -160,14 +160,27 @@ h1 {
     color: #ffffff;
 }
 
-#body-batalla {
+#ver-mapa {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#ver-mapa canvas {
+    border: 2px solid red;
+    width: 500px;
+    height: 500px;
+}
+
+#batalla {
     width: 500px;
     margin: auto;
     border: 5px double #cac16a;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
-#UI-batalla {
+#batalla-UI {
     background-image: url(../assets/img/template-batalla.png);
     background-size: 100% 100%;
     display: grid;
@@ -177,7 +190,7 @@ h1 {
     overflow: hidden;
 }
 
-#UI-batalla img {
+#batalla-UI img {
     margin: auto;
     height: 150px;
     width: 150px;
@@ -204,36 +217,35 @@ h1 {
     align-items: flex-end;
 }
 
-.info-batalla {
+#batalla-info {
     display: flex;
     flex-direction: row;
     overflow: hidden;
 }
 
-#seccion-mensajes  {
+#mensajes  {
     width: 60%;
     height: 85px;
     background-image: url(../assets/img/template-mensaje.png);
     background-size: 100% 100%;
 }
 
-#seccion-mensajes p {
+#mensajes p {
     font-size: 20px;
     text-align: start;
-    margin-left: 35px;
+    margin-left: 15px;
 }
 
-#seccion-ataques {
+#ataques {
     background: darkslategrey;
     width: 40%;
-    height: fit-content;
     display: grid;
     grid-template-rows: 50% 50%;
     grid-template-columns: 50% 50%;
     justify-items: center;
 }
 
-#seccion-ataques button {
+#ataques button {
     color: #575757;
     border-radius: 15px;
     width: 97px;

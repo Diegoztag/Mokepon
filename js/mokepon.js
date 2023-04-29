@@ -1,22 +1,17 @@
-let dbMokepon = [
+const dbMokepon = [
     {
         "nombre": "Maremira",
         "tipo": ["Agua"],
         "hp": 100,
         "ataques": {
             "Golpe gota": 5,
+            "Embestida": 10,
             "Marea": 15,
             "Lluvia": 50
-        }
-    },
-    {
-        "nombre": "Clorofendri",
-        "tipo": ["Planta"],
-        "hp": 100,
-        "ataques": {
-            "Golpe rama": 5,
-            "Azote liana": 15,
-            "Hojarasca": 50
+        },
+        "imagenes": {
+            "normal": "./assets/img/agua.png",
+            "batalla": "./assets/img/battle-agua.png",
         }
     },
     {
@@ -26,107 +21,202 @@ let dbMokepon = [
         "ataques": {
             "Golpe braza": 5,
             "Cola ceniza": 15,
-            "Erupción": 50
+            "Erupción": 50,
+            "Mordida": 10
+        },
+        "imagenes": {
+            "normal": "./assets/img/fuego.png",
+            "batalla": "./assets/img/battle-fuego.png",
+        }
+    },
+    {
+        "nombre": "Clorofendri",
+        "tipo": ["Planta"],
+        "hp": 100,
+        "ataques": {
+            "Golpe rama": 5,
+            "Azote liana": 15,
+            "Hojarasca": 50,
+            "Bofetada": 10
+        },
+        "imagenes": {
+            "normal": "./assets/img/planta.png",
+            "batalla": "./assets/img/battle-planta.png",
         }
     }
 ]
+
+//Secciones app
+const sectionMascotas = document.getElementById('mascotas');
+const sectionBatalla = document.getElementById('batalla');
+const sectionBatallaUI = document.getElementById('batalla-UI');
+const sectionReiniciar = document.getElementById('reiniciar');
+const sectionVerMapa = document.getElementById('ver-mapa')
+
+//Contenedores
+const divListaMascotas = document.getElementById('lista-mascotas');
+const divAtaques = document.getElementById('ataques');
+const divMensajes = document.getElementById('mensajes');
+
+//Botones
+const btnMascotaJugador = document.getElementById('btn-mascota');
+
+//Canvas
+const mapa = document.getElementById('mapa');
+
+//Progress
+const progressHpEnemigo = document.getElementById('hp-enemigo');
+const progressHpJugador = document.getElementById('hp-jugador');
+
+//Variables
 let infoMokeponJugador = {};
 let infoMokeponEnemigo = {};
+let lienzo = mapa.getContext('2d');
 let contadorHpJugador;
 let contadorHpEnemigo;
 
-function iniciarJuego() {
-    let btnMascotaJugador = document.getElementById('btn-mascota');
-    let divBatalla = document.getElementById('body-batalla');
-    let btnReiniciar = document.getElementById('reiniciar')
-
-    divBatalla.style.display = 'none';
-    btnReiniciar.style.display= 'none';
-    btnMascotaJugador.disabled = true;
-
-    //addEventListener dinamico se crea a como se necesite
-    document.addEventListener("click", function(event){
-        if (event.target.className == "radio-mascota"){
-            btnMascotaJugador.disabled = false;
-        }
-    }, false);
-
-    btnMascotaJugador.addEventListener('click', seleccionMascotaJugador);
-}
-
-function seleccionMascotaJugador() {
-    let inputMascotaJugador = document.querySelector('#seleccion-mascota input[type="radio"]:checked');
-    let spanMascotaJugador = document.getElementById('batalla-nombre-jugador');
-
-    spanMascotaJugador.textContent = capitalize(inputMascotaJugador.id);
-    crearMensaje(`Seleccionaste a <strong>${spanMascotaJugador.textContent}</strong>`);
-    //Extraemos del json de la info de los mokepones la info del mokepon seleccionado
-    infoMokeponJugador = dbMokepon.find(elem => elem.nombre == spanMascotaJugador.textContent);
-
-    escenaBatalla();
-}
-
-function escenaBatalla() {
-    let divBatalla = document.getElementById('body-batalla');
-    let sectionMascota = document.getElementById('seleccion-mascota');
-
-    sectionMascota.style.display = 'none';
-    divBatalla.style.display = 'block';
-
-    mostrarBtnAtaquesJugador();
-    seleccionMascotaEnemigo();
-    iniciarBatalla();
-}
-
-function mostrarBtnAtaquesJugador() {
-    let parentBtnAtaques = document.querySelector('#seccion-ataques');
-    let btnAtaques = document.querySelector('#seccion-ataques button');
-    //Elimina botones de ataque creados para crear los del nuevo mokepon seleccionado
-    btnAtaques ? eliminarNodosDom(parentBtnAtaques) : false;
-
-    //Se crea los botones dinamicamente dependiendo de los ataques que tenga el mokepon seleccionado
-    for (const ataque in infoMokeponJugador.ataques) {
-        let btnAtaque = document.createElement('button');
-        btnAtaque.textContent = ataque;
-        btnAtaque.className = "ataque-jugador";
-        btnAtaque.id = ataque.replace(' ','-')
-        parentBtnAtaques.appendChild(btnAtaque);
+class Mokepon {
+    constructor(nombre, tipo, hp, ataques, imagen) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+        this.hp = hp;
+        this.ataques = ataques;
+        this.x = 20;
+        this.y = 30;
+        this.ancho = 80;
+        this.alto = 80;
+        this.img = new Image();
+        this.img.src = imagen;
     }
 }
 
-function seleccionMascotaEnemigo() {
-    let inputMascotaEnemigo = document.querySelectorAll('#seleccion-mascota input[type="radio"]');
-    let spanMascotaEnemigo = document.getElementById('batalla-nombre-enemigo');
+function iniciarJuego() {
+    sectionVerMapa.style.display = 'none';
+    sectionBatalla.style.display = 'none';
+    sectionReiniciar.style.display= 'none';
+    btnMascotaJugador.disabled = true;
 
-    spanMascotaEnemigo.textContent = capitalize(inputMascotaEnemigo[aleatorio(1,3) - 1].id);
-    crearMensaje(`Tu enemigo seleccionó a <strong>${spanMascotaEnemigo.textContent}</strong>`);
+    crearMascotasSeleccion();
 
-    //Extraemos del json de mokepones la info del mokepon enemigo
-    infoMokeponEnemigo = dbMokepon.find(elem => elem.nombre == spanMascotaEnemigo.textContent);
+    document.onclick = function(event) {
+        if (event.target.className == "radio-mascota") {
+            btnMascotaJugador.disabled = false;
+        }
+    };
+
+    btnMascotaJugador.addEventListener('click', crearMapa);
 }
 
+function crearMascotasSeleccion() {
+    let htmlMascota;
+
+    dbMokepon.forEach(mascota => {
+        htmlMascota = `                  
+        <label class="label-mascota" for="${mascota.nombre}">
+            <img src="${mascota.imagenes.normal}" alt="${mascota.nombre}">
+            <span class="nombre-mascota">${mascota.nombre}</span>
+            <span class="badge ${mascota.tipo}">${mascota.tipo}</span>
+            <input type="radio" class="radio-mascota" name="mascota" id="${mascota.nombre}">
+        </label>`
+
+        divListaMascotas.insertAdjacentHTML('beforeend', htmlMascota);
+    });
+
+}
+
+function crearMapa() {
+    sectionMascotas.style.display = 'none';
+    sectionVerMapa.style.display = 'flex';
+
+    obtenerDatosMascotas();
+}
+
+function obtenerDatosMascotas() {
+    const inputMascotaJugador = document.querySelector('#mascotas input[type="radio"]:checked');
+    const inputMascotaEnemigo = document.querySelectorAll('#mascotas input[type="radio"]');
+
+    //Extraemos del json de la info de los mokepones la info del mokepon seleccionado
+    infoMokeponJugador = dbMokepon.find((elem) => elem.nombre == inputMascotaJugador.id);
+
+    mascotaPlayerData = new Mokepon(
+        infoMokeponJugador.nombre,
+        infoMokeponJugador.tipo,
+        infoMokeponJugador.hp,
+        infoMokeponJugador.ataques,
+        infoMokeponJugador.imagen);
+
+    console.log(mascotaPlayerData);
+
+    //Extraemos del json de mokepones la info del mokepon enemigo
+    const randomIndex = aleatorio(0, inputMascotaEnemigo.length - 1);
+    infoMokeponEnemigo = dbMokepon.find((elem) => elem.nombre == inputMascotaEnemigo[randomIndex].id);
+}
+
+function dibujarMascota() {
+    lienzo.drawImage(imagenMascota, 20, 40, 100, 100);
+}
+
+function moverMascota() {
+
+}
+
+// SECCION DE BATALLA
 function iniciarBatalla() {
-    let progressHpEnemigo = document.getElementById('hp-enemigo');
-    let progressHpJugador = document.getElementById('hp-jugador');
+    sectionVerMapa.style.display = 'none';
+    sectionBatalla.style.display = 'block';
+
+    crearEscenaBatalla();
+}
+
+function crearEscenaBatalla() {
+    let uiPlayers = `
+        <div id="info-enemigo" class="info-mascota">
+            <span>${infoMokeponEnemigo.nombre}</span>
+            <progress max="100" value="" id="hp-enemigo"></progress>
+        </div>
+
+        <img id="img-enemigo" src="${infoMokeponEnemigo.imagenes.normal}" alt="">
+
+        <img id="img-enemigo" src="${infoMokeponJugador.imagenes.batalla}" alt="">
+
+        <div id="info-enemigo" class="info-mascota">
+            <span>${infoMokeponJugador.nombre}</span>
+            <progress max="100" value="" id="hp-jugador"></progress>
+        </div>
+    `;
+
+    sectionBatallaUI.innerHTML = uiPlayers;
 
     contadorHpEnemigo = infoMokeponEnemigo.hp;
     contadorHpJugador = infoMokeponJugador.hp;
-
-    progressHpEnemigo.value = contadorHpEnemigo;
-    progressHpJugador.value = contadorHpJugador;
+    
+    document.getElementById('hp-enemigo').value = contadorHpEnemigo;
+    document.getElementById('hp-jugador').value = contadorHpJugador;
+    
+    crearBtnAtaquesJugador();
 
     crearMensaje(`Inicia la batalla...`);
+    crearMensaje(`Seleccionaste a <strong>${infoMokeponJugador.nombre}</strong>`);
+    crearMensaje(`Tu enemigo seleccionó a <strong>${infoMokeponEnemigo.nombre}</strong>`);
 
     ataqueJugador();
 }
 
+function crearBtnAtaquesJugador() {
+    //Se crea los botones dinamicamente dependiendo de los ataques que tenga el mokepon seleccionado
+    for (const ataque in infoMokeponJugador.ataques) {
+        let htmlAtaque = `<button class="ataque-jugador" id="${ataque}">${ataque}</button>`;
+
+        divAtaques.innerHTML += htmlAtaque;
+    }
+}
+
 function ataqueJugador() {
+    const progressHpEnemigo = document.getElementById('hp-enemigo');
     //addEventListener dinamico se crea a necesidad al presionar boton ataque
     document.addEventListener("click", function(event){
         if (event.target.className == "ataque-jugador"){
-            let progressHpEnemigo = document.getElementById('hp-enemigo');
             let nombreAtaque = event.target.textContent;
-            let btnAtaques = document.querySelector('#seccion-ataques').childNodes;
             let valorAtaque;
 
             //Se obtiene el valor del ataque que selecciono el jugador
@@ -139,30 +229,26 @@ function ataqueJugador() {
             //Si el contador disminuye de 0 saltara el mensaje de enemigo derrotado de lo contrario muestra el hp restante
             if(contadorHpEnemigo > 0) {
                 progressHpEnemigo.value = contadorHpEnemigo;
+                ataqueEnemigo();
             } else {
-                crearMensaje(`<strong>El enemigo ha sido derrotado</strong>`);
                 progressHpEnemigo.value = 0;
+                crearMensaje(`<strong>El enemigo ha sido derrotado</strong>`);
+                resultado();
                 //Al derrotar al enemigo se desactivan los botones de ataque
-                btnAtaques.forEach(btn => {
+                divAtaques.childNodes.forEach(btn => {
                     btn.disabled = true;
                 });
-            }
-            resultado(contadorHpEnemigo, contadorHpJugador);
-
-            if (contadorHpEnemigo > 0){
-                ataqueEnemigo();
             }
         }
     }, false);
 }
 
 function ataqueEnemigo() {
-    let btnAtaques = document.querySelector('#seccion-ataques').childNodes;
-    let progressHpJugador = document.getElementById('hp-jugador');
+    const progressHpJugador = document.getElementById('hp-jugador');
     let arrAtaques = [];
     let valoraleatorio = aleatorio(1,3) -1;
 
-    //Se convierte el objeto de ataques a array para poder seleccionar su indice aleatoriamente
+    // Se convierte el objeto de ataques a array para poder seleccionar su indice aleatoriamente
     for (var i in infoMokeponEnemigo.ataques) {
         arrAtaques.push(i);
     }
@@ -178,54 +264,36 @@ function ataqueEnemigo() {
     if(contadorHpJugador > 0) {
         progressHpJugador.value = contadorHpJugador;
     } else {
-        crearMensaje(`<strong>Tu mascota fue derrotada</strong>`);
         progressHpJugador.value = 0;
+        crearMensaje(`<strong>Tu mascota fue derrotada</strong>`);
+        resultado();
         //Al derrotar al enemigo se desactivan los botones de ataque
-        btnAtaques.forEach(btn => {
+        divAtaques.childNodes.forEach(btn => {
             btn.disabled = true;
         });
     }
-    resultado();
 }
 
 function resultado(){
-    let btnReiniciar = document.getElementById('reiniciar');
-
     if(contadorHpEnemigo <= 0 ){
         crearMensaje(`Haz GANADO!! 🎉`);
-        btnReiniciar.style.display = 'block';
+        sectionReiniciar.style.display = 'block';
     }
 
     if(contadorHpJugador <= 0) {
         crearMensaje(`Haz PERDIDO!! 💀`);
-        btnReiniciar.style.display = 'block';
+        sectionReiniciar.style.display = 'block';
     }
 
-
-    btnReiniciar.addEventListener('click', reiniciar);
+    sectionReiniciar.addEventListener('click', reiniciar);
 }
 
 function aleatorio(min, max){
-    return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function capitalize(string){
-    return string[0].toUpperCase() + string.substring(1);
-}
-
-function eliminarNodosDom(parent){
-    while (parent.firstChild) {
-        parent.removeChild(parent.firstChild);
-    }
-}
-
-function crearMensaje(mensaje) {
-    let mensajes = document.querySelector('#seccion-mensajes');
-    let parrafo =  document.querySelector('#seccion-mensajes p');
-    let pMensaje = document.createElement('p');
-    
-    document.querySelector('#seccion-mensajes p') ? mensajes.replaceChild(pMensaje, parrafo) :  mensajes.appendChild(pMensaje);
-    pMensaje.innerHTML = mensaje;
+function crearMensaje(string) {
+    divMensajes.innerHTML = `<p>${string}</p>`;
 }
 
 function reiniciar() {
